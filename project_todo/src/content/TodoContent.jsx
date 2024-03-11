@@ -166,6 +166,7 @@ function TodoContent() {
         const updateTodoList = [...todoList];
         updateTodoList[findIndex].content = inputValue;
         setInputValue("")
+        
     }
 
     return (
