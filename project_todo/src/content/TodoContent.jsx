@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useInput } from "../hooks/inputHook"
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
@@ -131,53 +131,58 @@ const deleteBtn = css`
     }
 `;
 
-
 function TodoContent() {
-    const [ todoList, setTodoList ] = useState([]);
-    const [ inputValue, onchange, setInputValue] = useInput();
+    const [todoList, setTodoList] = useState(() => {
+        const savedTodoList = JSON.parse(localStorage.getItem('todoList'));
+        return savedTodoList || [];
+    });
+        const [inputValue, onchange, setInputValue] = useInput();
+        
+    useEffect(() => {
+        localStorage.setItem('todoList', JSON.stringify(todoList));
+    }, [todoList]);
 
     const handleAddItem = () => {
-        if(inputValue === "") {
-            alert("내용을 입력해주세요.")
+        if (inputValue === "") {
+            alert("내용을 입력해주세요.");
             return;
         }
-        const lastIndex = todoList.length - 1
-        const lastId = lastIndex < 0 ? 0 : todoList[lastIndex].todoId
+        const lastIndex = todoList.length - 1;
+        const lastId = lastIndex < 0 ? 0 : todoList[lastIndex].todoId;
         const todo = {
             todoId: lastId + 1,
             content: inputValue
-        }
-        const newTodoList = [...todoList, todo]
+        };
+        const newTodoList = [...todoList, todo];
         setTodoList(newTodoList);
-        setInputValue("")
-    }
+        setInputValue("");
+    };
 
     const handleDeleteBtn = (id) => {
         setTodoList([...todoList.filter(todo => todo.todoId !== id)]);
-    }
+    };
 
     const handleUpdateBtn = (id) => {
-        setInputValue(todoList.filter(todo => todo.todoId === id)[0].content)
-        
-    }
+        setInputValue(todoList.filter(todo => todo.todoId === id)[0].content);
+    };
 
     const handleUpdateSubmitClick = (id) => {
-        const findIndex  = todoList.indexOf(todoList.filter(todo => todo.todoId === id)[0])
+        const findIndex = todoList.findIndex(todo => todo.todoId === id);
         const updateTodoList = [...todoList];
         updateTodoList[findIndex].content = inputValue;
-        setInputValue("")
-        
-    }
+        setTodoList(updateTodoList);
+        setInputValue("");
+    };
 
     return (
         <div css={mainLayout}>
             <main css={layout}>
                 <div css={inputBox}>
-                    <input css={inputContent} type='text' value={inputValue} onChange={onchange} placeholder='오늘 할 일을 입력해주세요.'/>
+                    <input css={inputContent} type='text' value={inputValue} onChange={onchange} placeholder='오늘 할 일을 입력해주세요.' />
                 </div>
                 <button css={inputButton} onClick={handleAddItem}>+</button>
                 <div css={listLayout}>
-                    {todoList.map((todo, index) => 
+                    {todoList.map((todo, index) =>
                         <div css={listItem} key={todo.todoId}>
                             <div>
                                 <input type='checkbox' />
@@ -196,5 +201,7 @@ function TodoContent() {
         </div>
     );
 }
+
+
 
 export default TodoContent;
