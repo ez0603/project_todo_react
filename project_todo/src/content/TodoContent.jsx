@@ -138,6 +138,7 @@ function TodoContent() {
     });
         const [inputValue, onchange, setInputValue] = useInput();
         
+        
     useEffect(() => {
         localStorage.setItem('todoList', JSON.stringify(todoList));
     }, [todoList]);
@@ -160,7 +161,10 @@ function TodoContent() {
 
     const handleDeleteBtn = (id) => {
         setTodoList([...todoList.filter(todo => todo.todoId !== id)]);
+        alert("삭제되었습니다");
+        window.location.href = '/todo-end'; 
     };
+    
 
     const handleUpdateBtn = (id) => {
         setInputValue(todoList.filter(todo => todo.todoId === id)[0].content);
@@ -185,7 +189,6 @@ function TodoContent() {
                     {todoList.map((todo, index) =>
                         <div css={listItem} key={todo.todoId}>
                             <div>
-                                <input type='checkbox' />
                                 <div>{index + 1}</div>
                                 <div>{todo.content}</div>
                             </div>

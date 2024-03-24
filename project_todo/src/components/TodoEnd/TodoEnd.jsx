@@ -5,7 +5,9 @@ function TodoEnd() {
     return (
         <div css={S.mainLayout}>
             <main css={S.layout}>
-                <div css={S.contentBox}>
+                <div>
+                    <div css={S.contentBox}>
+                    </div>
                 </div>
             </main>
         </div>

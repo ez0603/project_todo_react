@@ -22,5 +22,10 @@ export const layout = css`
 `;
 
 export const contentBox = css`
-    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 60px;
+    border: 1px solid #eee;
 `;
